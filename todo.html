@@ -1,0 +1,71 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript vs. Vue.js</title>
+
+    <style>
+        #js,
+        #vue {
+            border: 1px solid black;
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Todo List</h1>
+
+    <!-- JavaScript Code -->
+    <div id="js">
+        <h2>Using JavaScript</h2>
+        <form>
+            <input type="text" required />
+            <button type="submit">Add</button>
+        </form>
+        <ul></ul>
+    </div>
+
+    <script>
+        document.querySelector("#js form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.querySelector("#js ul").insertAdjacentHTML(
+                "beforeend",
+                `<li>${this.querySelector("input").value}</li>`
+            );
+            this.querySelector("input").value = "";
+        });
+    </script>
+    <!-- JavaScript Code End -->
+
+    <!-- Vue.js Code -->
+    <div id="vue">
+        <h2>Using Vue.js</h2>
+        <form v-on:submit.prevent="addItem">
+            <input type="text" required v-model="newTask" />
+            <button type="submit">Add</button>
+        </form>
+        <ul></ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: "#vue",
+            data: { newTask: "" },
+            methods: {
+                addItem: () => {
+                    let newItem = document.createElement("li");
+                    newItem.innerText = app.newTask;
+                    document.querySelector("#vue ul").appendChild(newItem);
+                    app.newTask = "";
+                },
+            },
+        });
+    </script>
+    <!-- Vue.js Code End -->
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>After School Club</title>
+
+    <style>
+      .lesson {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .lesson img {
+        width: 80px;
+        height: 80px;
+      }
+
+      .lesson h2 {
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1 v-text="sitename"></h1>
+      <div class="lesson">
+        <img v-bind:src="lesson.image" :alt="lesson.image_alt" />
+        <div>
+          <h2 v-text="lesson.subject"></h2>
+          <p v-text="lesson.location"></p>
+          <p>Price: {{lesson.price}}</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          sitename: "After School Club",
+          lesson: {
+            id: 1001,
+            subject: "Math",
+            location: "London",
+            price: 100,
+            image: "images/math.png",
+            image_alt: "math_icon",
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

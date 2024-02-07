@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Store</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1 v-text="sitename"></h1>
+      <img v-bind:src="product.image" />
+      <h2 v-text="product.title"></h2>
+      <p v-html="product.description"></p>
+      <p>Price: {{product.price}}</p>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          sitename: "Welcome to Pet Store!",
+          product: {
+            id: 1001,
+            title: "Cat Food, 25lb bag",
+            description:
+              "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
+            price: 2000,
+            image: "images/cat_food.png",
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
