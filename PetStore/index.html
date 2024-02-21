@@ -45,7 +45,7 @@
             <b>State:</b>
             <select v-model="order.state">
               <option disabled value="">State</option>
-              <option v-for="state in states" v-bind:value="state">
+              <option v-for="(state, key) in states" v-bind:value="state">
                 {{state}}
               </option>
             </select>
@@ -114,7 +114,12 @@
             inventory: 5,
           },
           cart: [],
-          states: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"],
+          states: {
+            AL: "Alabama",
+            AR: "Arizona",
+            CA: "California",
+            NV: "Nevada",
+          },
           order: {
             firstName: "",
             lastName: "",
