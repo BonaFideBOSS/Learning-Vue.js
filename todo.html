@@ -56,7 +56,7 @@
             el: "#vue",
             data: { newTask: "" },
             methods: {
-                addItem: () => {
+                addItem() {
                     let newItem = document.createElement("li");
                     newItem.innerText = app.newTask;
                     document.querySelector("#vue ul").appendChild(newItem);
