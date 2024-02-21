@@ -31,8 +31,67 @@
       <!-- Checkout Page -->
       <div v-else>
         <h1>Checkout</h1>
+        <button @click="showCheckout" style="margin-bottom: 1rem">
+          Go back
+        </button>
         <p>Items in cart: {{cartItemCount}}</p>
-        <button @click="showCheckout">Go back</button>
+
+        <form v-on:submit.prevent="submitOrder" style="margin-bottom: 1rem">
+          <p><b>First Name:</b> <input v-model.trim="order.firstName" /></p>
+          <p><b>Last Name:</b> <input v-model.trim="order.lastName" /></p>
+          <p><b>Address:</b> <input v-model="order.address" /></p>
+          <p><b>City:</b> <input v-model="order.city" /></p>
+          <p>
+            <b>State:</b>
+            <select v-model="order.state">
+              <option disabled value="">State</option>
+              <option v-for="state in states" v-bind:value="state">
+                {{state}}
+              </option>
+            </select>
+          </p>
+          <p>
+            <b>Zip/Postal Code:</b>
+            <input v-model.number="order.zip" type="number" />
+          </p>
+
+          <p>
+            <input
+              type="checkbox"
+              id="gift"
+              value="true"
+              v-model="order.gift"
+              v-bind:true-value="order.sendGift"
+              v-bind:false-value="order.dontSendGift"
+            />
+            <label for="gift">Ship As Gift?</label>
+          </p>
+          <p>
+            <input type="radio" id="home" value="Home" v-model="order.method" />
+            <label for="home">Home</label>
+            <input
+              type="radio"
+              id="business"
+              value="Business"
+              v-model="order.method"
+            />
+            <label for="business">Business</label>
+          </p>
+
+          <button type="submit">Place Order</button>
+        </form>
+
+        <div style="background-color: lightblue; padding: 1rem">
+          <h3>Order Information</h3>
+          <p>First Name: {{order.firstName}}</p>
+          <p>Last Name: {{order.lastName}}</p>
+          <p>Address: {{order.address}}</p>
+          <p>City: {{order.city}}</p>
+          <p>State: {{order.state}}</p>
+          <p>Zip: {{order.zip}}</p>
+          <p>Gift? {{order.gift}}</p>
+          <p>Method: {{order.method}}</p>
+        </div>
       </div>
     </main>
 
@@ -55,6 +114,19 @@
             inventory: 5,
           },
           cart: [],
+          states: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"],
+          order: {
+            firstName: "",
+            lastName: "",
+            address: "",
+            city: "",
+            state: "",
+            zip: "",
+            gift: "Send as a gift",
+            sendGift: "Send as a gift",
+            dontSendGift: "Do not send as a gift",
+            method: "Home",
+          },
         },
         // App Methods
         methods: {
@@ -66,6 +138,9 @@
           },
           showCheckout() {
             this.showProduct = this.showProduct ? false : true;
+          },
+          submitOrder() {
+            alert("Order Submitted!");
           },
         },
         computed: {
