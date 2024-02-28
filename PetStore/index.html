@@ -9,23 +9,45 @@
   <body>
     <main id="app">
       <h1 v-text="sitename"></h1>
+      <button @click="showCheckout" :disabled="cart.length == 0">
+        Checkout ({{cart.length}})
+      </button>
 
       <!-- Product Page -->
-      <div v-if="showProduct">
-        <img v-bind:src="product.image" />
-        <h2 v-text="product.title"></h2>
-        <p v-html="product.description"></p>
-        <p>Price: {{product.price}}</p>
-        <button @click="addToCart" :disabled="!canAddToCart">
-          Add to cart
-        </button>
-        <button @click="removeFromCart" v-show="canRemoveFromCart">
-          Remove from Cart
-        </button>
-
-        <button @click="showCheckout" :disabled="cart.length == 0">
-          Checkout ({{cartItemCount}})
-        </button>
+      <div v-if="showProduct" style="display: flex; flex-wrap: wrap; gap: 5rem">
+        <div v-for="product in products">
+          <img v-bind:src="product.image" height="250px" />
+          <div>
+            <h2 v-text="product.title" style="display: inline-block"></h2>
+            <span v-if="product.inventory===cartCount(product.id)"
+              >All out!</span
+            >
+            <span
+              v-else-if="product.inventory - cartCount(product.id) < product.inventory"
+            >
+              Only {{product.inventory - cartCount(product.id)}} left!
+            </span>
+            <span v-else>Buy now!</span>
+          </div>
+          <div style="display: flex">
+            <span v-for="n in product.rating">★</span>
+            <span v-for="n in 5-product.rating">☆</span>
+          </div>
+          <p v-html="product.description"></p>
+          <p>Price: {{product.price}}</p>
+          <button
+            @click="addToCart(product)"
+            :disabled="!canAddToCart(product)"
+          >
+            Add to cart
+          </button>
+          <button
+            @click="removeFromCart(product)"
+            v-show="canRemoveFromCart(product)"
+          >
+            Remove from Cart
+          </button>
+        </div>
       </div>
 
       <!-- Checkout Page -->
@@ -34,7 +56,7 @@
         <button @click="showCheckout" style="margin-bottom: 1rem">
           Go back
         </button>
-        <p>Items in cart: {{cartItemCount}}</p>
+        <p>Items in cart: {{cart.length}}</p>
 
         <form v-on:submit.prevent="submitOrder" style="margin-bottom: 1rem">
           <p><b>First Name:</b> <input v-model.trim="order.firstName" /></p>
@@ -95,6 +117,7 @@
       </div>
     </main>
 
+    <script src="products.js"></script>
     <script src="../scripts/vue.js"></script>
 
     <script>
@@ -104,15 +127,7 @@
         data: {
           sitename: "Welcome to Pet Store!",
           showProduct: true,
-          product: {
-            id: 1001,
-            title: "Cat Food, 25lb bag",
-            description:
-              "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
-            price: 2000,
-            image: "images/cat_food.png",
-            inventory: 5,
-          },
+          products: products,
           cart: [],
           states: {
             AL: "Alabama",
@@ -135,30 +150,44 @@
         },
         // App Methods
         methods: {
-          addToCart() {
-            this.cart.push(this.product.id);
+          cartCount(id) {
+            let count = 0;
+            for (let i = 0; i < this.cart.length; i++) {
+              if (this.cart[i] === id) {
+                count++;
+              }
+            }
+            return count;
           },
-          removeFromCart() {
-            this.cart.pop(this.product.id);
+
+          canAddToCart(product) {
+            return product.inventory > this.cartCount(product.id);
           },
+
+          canRemoveFromCart(product) {
+            return this.cartCount(product.id) > 0;
+          },
+
+          addToCart(product) {
+            this.cart.push(product.id);
+          },
+
+          removeFromCart(product) {
+            const index = this.cart.lastIndexOf(product.id);
+            if (index > -1) {
+              this.cart.splice(index, 1);
+            }
+          },
+
           showCheckout() {
             this.showProduct = this.showProduct ? false : true;
           },
+
           submitOrder() {
             alert("Order Submitted!");
           },
         },
-        computed: {
-          cartItemCount() {
-            return this.cart.length || 0;
-          },
-          canAddToCart() {
-            return this.product.inventory > this.cartItemCount;
-          },
-          canRemoveFromCart() {
-            return this.cartItemCount > 0;
-          },
-        },
+        computed: {},
       });
     </script>
   </body>
